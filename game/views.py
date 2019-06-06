@@ -6,7 +6,7 @@ from pprint import pprint
 
 
 from .models import Player, Game
-from .constants import *
+from .constants import MOVES
 
 # player dashboard view
 def index(request):
@@ -79,6 +79,7 @@ def detail(request, game_id):
         raise Http404()
     context = {
         'player': request.player,
-        'game': game
+        'game': game,
+        'moves': MOVES
     }
     return render(request, 'game/detail.html', context=context)
