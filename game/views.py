@@ -64,15 +64,21 @@ def join(request):
     game = get_object_or_404(Game, pk=request.POST['game_id'])
     # game full
     if(game.player_b_id):
-        return Http404()
+        raise Http404()
     # set player_b
     request.player.other_games.add(game)
-    return HttpResponseRedirect(reverse('game:detail'))
+    request.player.current_games.add(game)
+    return HttpResponseRedirect(reverse('game:detail', kwargs={ 'game_id': game.id }))
 
 
 # game detail view
-def detail(request):
+def detail(request, game_id):
+    player = request.player
+    game = get_object_or_404(Game, pk=game_id)
+    if(player.id != game.player_a.id and player.id != game.player_b.id):
+        raise Http404()
     context = {
-        'player': request.player
+        'player': request.player,
+        'game': game
     }
     return render(request, 'game/detail.html', context=context)
