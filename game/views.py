@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.db.models import Q
 
 from .models import Player, Game
 from .constants import *
@@ -9,6 +10,7 @@ def index(request):
     player = request.player
     context = {
         'player': player,
+        'other_new_games': Game.objects.filter(~Q(player_a=player.id)),
         'own_games': player.own_games.all()
     }
 
