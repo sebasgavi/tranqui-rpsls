@@ -9,7 +9,7 @@ def index(request):
     player = request.player
     context = {
         'player': player,
-        'games': player.player_a.all()
+        'own_games': player.own_games.all()
     }
 
     return render(request, 'game/index.html', context=context)

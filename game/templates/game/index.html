@@ -9,7 +9,7 @@
                 <div class="card-body">
                     <h3 class="card-title">Your games</h3>
                     <ul>
-                        {% for game in games %}
+                        {% for game in own_games %}
                             <li>Game {{ game.id }}</li>
                         {% endfor %}
                     </ul>
