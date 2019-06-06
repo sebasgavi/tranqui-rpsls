@@ -2,17 +2,33 @@
 
 {% block content %}
     {% if player %}
-        {{ player.name }}
 
-        <a href="{% url 'game:leave' %}">Leave</a>
+        <nav class="navbar navbar-light bg-light">
+            <span class="navbar-brand mb-0 h1">{{ player.name }}</span>
+            
+            <a href="{% url 'game:leave' %}" class="btn btn-outline-secondary">Leave</a>
+        </nav>
+        
+
     {% else %}
-        <form action="{% url 'game:enter' %}" method="post">
-            {% csrf_token %}
-            <label>
-                Enter your player name
-                <input type="text" name="name" required>
-            </label>
-            <button type="submit">Enviar</button>
-        </form>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card my-5">
+                    <div class="card-body">
+                        <h5 class="card-title">Enter to the game</h5>
+                        <p class="card-text">Enter your player name below to access your previously created profile or create a new one.</p>
+                        <form action="{% url 'game:enter' %}" method="post">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <input type="text" name="name" class="form-control" placeholder="Enter player name" required>
+                                 <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit">Enter</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endif %}
 {% endblock %}
