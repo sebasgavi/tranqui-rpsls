@@ -1,14 +1,18 @@
-{% if player %}
-    {{ player.name }}
+{% extends 'game/base.html' %}
 
-    <a href="{% url 'game:leave' %}">Leave</a>
-{% else %}
-    <form action="{% url 'game:enter' %}" method="post">
-        {% csrf_token %}
-        <label>
-            Enter your player name
-            <input type="text" name="name" required>
-        </label>
-        <button type="submit">Enviar</button>
-    </form>
-{% endif %}
+{% block content %}
+    {% if player %}
+        {{ player.name }}
+
+        <a href="{% url 'game:leave' %}">Leave</a>
+    {% else %}
+        <form action="{% url 'game:enter' %}" method="post">
+            {% csrf_token %}
+            <label>
+                Enter your player name
+                <input type="text" name="name" required>
+            </label>
+            <button type="submit">Enviar</button>
+        </form>
+    {% endif %}
+{% endblock %}

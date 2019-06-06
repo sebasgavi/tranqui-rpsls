@@ -38,4 +38,4 @@ def leave(request):
     if('player_id' in request.session):
         del request.session['player_id']
     # redirect to game index
-    return HttpResponseRedirect(reverse('game:index'))    
+    return HttpResponseRedirect(reverse('game:index'))
