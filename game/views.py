@@ -13,7 +13,7 @@ def index(request):
     player = request.player
     context = {
         'player': player,
-        'other_new_games': Game.objects.filter(~Q(player_a=player.id)),
+        'other_new_games': Game.objects.filter(~Q(player_a=player.id), ~Q(player_b=player.id)),
         'own_games': player.own_games.all()
     }
     return render(request, 'game/index.html', context=context)

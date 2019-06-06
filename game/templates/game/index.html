@@ -8,18 +8,22 @@
                 <div class="card">
                     <div class="card-body">
                         <h3 class="card-title mb-4">Others' games</h3>
-                        <ul class="list-group list-group-flush">
-                            {% for game in other_new_games %}
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Game {{ game.id }}
-                                    <form action="{% url 'game:join' %}" method="POST">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="game_id" value="{{ game.id }}">
-                                        <button type="submit" class="btn btn-sm btn-outline-success">Join</button>
-                                    </form>
-                                </li>
-                            {% endfor %}
-                        </ul>
+                        {% if other_new_games %}
+                            <ul class="list-group list-group-flush">
+                                {% for game in other_new_games %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Game {{ game.id }}
+                                        <form action="{% url 'game:join' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="game_id" value="{{ game.id }}">
+                                            <button type="submit" class="btn btn-sm btn-outline-success">Join</button>
+                                        </form>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p>Nobody has started any games</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -27,7 +31,7 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="card-title">Your games</h3>
+                    <h3 class="card-title mb-4">Your games</h3>
                     <ul>
                         {% for game in own_games %}
                             <li>Game {{ game.id }}</li>
@@ -40,7 +44,7 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="card-title">Create new game</h3>
+                    <h3 class="card-title mb-4">Create new game</h3>
                     <p>
                         Create a new game and wait for another player to join you.
                     </p>
