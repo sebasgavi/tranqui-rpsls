@@ -16,6 +16,11 @@ def index(request):
 
     return render(request, 'game/index.html', context=context)
 
+def login(request):
+    if(request.player):
+        return HttpResponseRedirect(reverse('game:index'))
+    return render(request, 'game/login.html')
+
 
 def enter(request):
     # get name from form

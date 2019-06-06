@@ -25,7 +25,7 @@ def get_winner(move_a, move_b):
 
 
 class SimplePlayerMiddleware:
-    protected_views = ['new', 'field']
+    protected_views = ['index', 'new', 'field']
 
     def __init__(self, get_response):
         self.get_response = get_response
@@ -45,6 +45,6 @@ class SimplePlayerMiddleware:
         request.player = player
 
         if(not player and view_func.__name__ in self.protected_views):
-            return HttpResponseRedirect(reverse('game:index'))
+            return HttpResponseRedirect(reverse('game:login'))
 
         return None
