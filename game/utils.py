@@ -12,7 +12,7 @@ def get_winner(move_a, move_b):
         return -1
     elif move_a == LIZARD and (move_b == SPOCK or move_b == PAPER):
         return -1
-    elif move_a == SPOCK and (move_b == SCISSORS or move_b == PAPER):
+    elif move_a == SPOCK and (move_b == SCISSORS or move_b == ROCK):
         return -1
     elif move_a == move_b:
         return 0
