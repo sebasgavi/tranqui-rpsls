@@ -4,6 +4,9 @@ from django.urls import reverse
 from .models import Player
 from .constants import *
 
+# move_a -> move constant
+# move_b -> move constant
+# returns -1 if winner is a, 1 if winner is b and 0 if is a tie
 def get_winner(move_a, move_b):
     if(move_a not in MOVES or move_b not in MOVES):
         raise Exception('invalid move')
@@ -25,6 +28,7 @@ def get_winner(move_a, move_b):
 
 
 class SimplePlayerMiddleware:
+    # views that need a logged in player
     protected_views = ['index', 'new', 'field']
 
     def __init__(self, get_response):
@@ -34,17 +38,23 @@ class SimplePlayerMiddleware:
         response = self.get_response(request)
         return response
 
+    # redirect on protected views without player
     def process_view(self, request, view_func, view_args, view_kwargs):
+        # get player id from session
         player = request.session.get('player_id', False)
         if(player):
             try:
+                # try to load player from db
                 player = Player.objects.get(pk=player)
             except Player.DoesNotExist:
                 player = False
         
+        # pass info to view with the request object
         request.player = player
 
+        # redirect to login if is a protected view and player isn't logged in
         if(not player and view_func.__name__ in self.protected_views):
             return HttpResponseRedirect(reverse('game:login'))
 
+        # else continue
         return None
