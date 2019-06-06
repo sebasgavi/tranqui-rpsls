@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 
 from .models import Player
+from .constants import *
 
 def index(request):
     player = request.session.get('player_id', False)
@@ -14,6 +15,7 @@ def index(request):
     context = {
         'player': player
     }
+
     return render(request, 'game/index.html', context=context)
 
 
