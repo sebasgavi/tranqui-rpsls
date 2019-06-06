@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
-from .models import Player
+from .models import Player, Game
 from .constants import *
 
 def index(request):
@@ -37,7 +37,14 @@ def leave(request):
 
 
 def new(request):
+    game = Game(player_a=request.player, steps='[]')
+    game.save()
+    context = {
+        'player': request.player,
+        'game': game
+    }
     return HttpResponseRedirect(reverse('game:field'))
+
 
 def field(request):
     context = {
