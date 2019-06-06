@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.db.models import Q
+from pprint import pprint
+
 
 from .models import Player, Game
 from .constants import *
@@ -57,9 +59,20 @@ def new(request):
     return HttpResponseRedirect(reverse('game:index'))
 
 
-# game field view
-def field(request):
+# join game action
+def join(request):
+    game = get_object_or_404(Game, pk=request.POST['game_id'])
+    # game full
+    if(game.player_b_id):
+        return Http404()
+    # set player_b
+    request.player.other_games.add(game)
+    return HttpResponseRedirect(reverse('game:detail'))
+
+
+# game detail view
+def detail(request):
     context = {
         'player': request.player
     }
-    return render(request, 'game/field.html', context=context)
+    return render(request, 'game/detail.html', context=context)

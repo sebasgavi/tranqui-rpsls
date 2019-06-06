@@ -9,5 +9,6 @@ urlpatterns = [
     path('enter', views.enter, name='enter'),
     path('leave', views.leave, name='leave'),
     path('new', views.new, name='new'),
-    path('field', views.field, name='field')
+    path('join', views.join, name='join'),
+    path('detail', views.detail, name='detail')
 ]
