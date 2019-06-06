@@ -1,34 +1,22 @@
 {% extends 'game/base.html' %}
 
 {% block content %}
-    {% if player %}
-
-        <nav class="navbar navbar-light bg-light">
-            <span class="navbar-brand mb-0 h1">{{ player.name }}</span>
-            
-            <a href="{% url 'game:leave' %}" class="btn btn-outline-secondary">Leave</a>
-        </nav>
         
+    <div class="row">
 
-    {% else %}
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card my-5">
-                    <div class="card-body">
-                        <h5 class="card-title">Enter to the game</h5>
-                        <p class="card-text">Enter your player name below to access your previously created profile or create a new one.</p>
-                        <form action="{% url 'game:enter' %}" method="post">
-                            {% csrf_token %}
-                            <div class="input-group">
-                                <input type="text" name="name" class="form-control" placeholder="Enter player name" required>
-                                 <div class="input-group-append">
-                                    <button class="btn btn-primary" type="submit">Enter</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Create new game</h3>
+                    <p>
+                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptate voluptatum dignissimos maxime similique iusto porro, maiores neque exercitationem, quos, eos inventore magnam aut. Consequatur corporis magni exercitationem quos maxime. Exercitationem.
+                    </p>
+                    <form action="{% url 'game:new' %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit">New Game</button>
+                    </form>
                 </div>
             </div>
         </div>
-    {% endif %}
+    </div>
 {% endblock %}

@@ -41,3 +41,19 @@ def leave(request):
         del request.session['player_id']
     # redirect to game index
     return HttpResponseRedirect(reverse('game:index'))
+
+
+def new(request):
+    return HttpResponseRedirect(reverse('game:field'))
+
+def field(request):
+    player = request.session.get('player_id', False)
+    if(player):
+        try:
+            player = Player.objects.get(pk=player)
+        except Player.DoesNotExist:
+            player = false
+    context = {
+        'player': player
+    }
+    return render(request, 'game/field.html', context=context)

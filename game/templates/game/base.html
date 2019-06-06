@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Tranqui RPSLS</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/solid.min.css">
 </head>
 <body>
 
@@ -15,10 +17,38 @@
             <h3>Prueba Técnica - Sebastián Gaviria</h3>
         </header>
 
+        {% if player %}
 
-        {% block content %}
+            <nav class="navbar navbar-light bg-light">
+                <span class="navbar-brand mb-0 h1">{{ player.name }}</span>
+                
+                <a href="{% url 'game:leave' %}" class="btn btn-outline-secondary">Leave</a>
+            </nav>
 
-        {% endblock %}
+            
+            {% block content %}{% endblock %}
+
+        {% else %}
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card my-5">
+                        <div class="card-body">
+                            <h5 class="card-title">Enter to the game</h5>
+                            <p class="card-text">Enter your player name below to access your previously created profile or create a new one.</p>
+                            <form action="{% url 'game:enter' %}" method="post">
+                                {% csrf_token %}
+                                <div class="input-group">
+                                    <input type="text" name="name" class="form-control" placeholder="Enter player name" required>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="submit">Enter</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </div>
     
 </body>
