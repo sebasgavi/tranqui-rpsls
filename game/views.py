@@ -20,7 +20,7 @@ def index(request):
 def enter(request):
     # get name from form
     name = request.POST['name']
-    # if name exsists try to get player or create a new one
+    # if name exists try to get player or create a new one
     if(name):
         try:
             player = Player.objects.get(name=name)
@@ -31,3 +31,11 @@ def enter(request):
         request.session['player_id'] = player.id
     # redirect to game index
     return HttpResponseRedirect(reverse('game:index'))
+
+
+def leave(request):
+    # remove info from session if exists
+    if('player_id' in request.session):
+        del request.session['player_id']
+    # redirect to game index
+    return HttpResponseRedirect(reverse('game:index'))    
