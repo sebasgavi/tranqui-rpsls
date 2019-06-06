@@ -2,14 +2,27 @@
 
 {% block content %}
         
-    <div class="row">
+    <div class="row mt-5">
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Your games</h3>
+                    <ul>
+                        {% for game in games %}
+                            <li>Game {{ game.id }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
 
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
                     <h3 class="card-title">Create new game</h3>
                     <p>
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptate voluptatum dignissimos maxime similique iusto porro, maiores neque exercitationem, quos, eos inventore magnam aut. Consequatur corporis magni exercitationem quos maxime. Exercitationem.
+                        Create a new game and wait for another player to join you.
                     </p>
                     <form action="{% url 'game:new' %}" method="POST">
                         {% csrf_token %}

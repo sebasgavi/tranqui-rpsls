@@ -6,9 +6,12 @@ from .models import Player, Game
 from .constants import *
 
 def index(request):
+    player = request.player
     context = {
-        'player': request.player
+        'player': player,
+        'games': player.player_a.all()
     }
+
     return render(request, 'game/index.html', context=context)
 
 
@@ -39,11 +42,7 @@ def leave(request):
 def new(request):
     game = Game(player_a=request.player, steps='[]')
     game.save()
-    context = {
-        'player': request.player,
-        'game': game
-    }
-    return HttpResponseRedirect(reverse('game:field'))
+    return HttpResponseRedirect(reverse('game:index'))
 
 
 def field(request):
