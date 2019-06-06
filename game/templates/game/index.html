@@ -50,7 +50,7 @@
                     </p>
                     <form action="{% url 'game:new' %}" method="POST">
                         {% csrf_token %}
-                        <button type="submit">New Game</button>
+                        <button class="btn btn-outline-success float-right" type="submit">New Game</button>
                     </form>
                 </div>
             </div>
