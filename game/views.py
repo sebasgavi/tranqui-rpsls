@@ -6,6 +6,7 @@ from django.db.models import Q
 from .models import Player, Game
 from .constants import *
 
+# player dashboard view
 def index(request):
     player = request.player
     context = {
@@ -13,15 +14,17 @@ def index(request):
         'other_new_games': Game.objects.filter(~Q(player_a=player.id)),
         'own_games': player.own_games.all()
     }
-
     return render(request, 'game/index.html', context=context)
 
+
+# login form view
 def login(request):
     if(request.player):
         return HttpResponseRedirect(reverse('game:index'))
     return render(request, 'game/login.html')
 
 
+# login form action
 def enter(request):
     # get name from form
     name = request.POST['name']
@@ -38,6 +41,7 @@ def enter(request):
     return HttpResponseRedirect(reverse('game:index'))
 
 
+# logout form action
 def leave(request):
     # remove info from session if exists
     if('player_id' in request.session):
@@ -46,12 +50,14 @@ def leave(request):
     return HttpResponseRedirect(reverse('game:index'))
 
 
+# new game action
 def new(request):
     game = Game(player_a=request.player, steps='[]')
     game.save()
     return HttpResponseRedirect(reverse('game:index'))
 
 
+# game field view
 def field(request):
     context = {
         'player': request.player
