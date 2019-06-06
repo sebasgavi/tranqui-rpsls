@@ -1,1 +1,12 @@
-test
+{% if player %}
+    {{ player.name }}
+{% else %}
+    <form action="{% url 'game:enter' %}" method="post">
+        {% csrf_token %}
+        <label>
+            Enter your player name
+            <input type="text" name="name" required>
+        </label>
+        <button type="submit">Enviar</button>
+    </form>
+{% endif %}
