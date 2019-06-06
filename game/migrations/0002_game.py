@@ -16,10 +16,10 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('steps', models.CharField(max_length=1000)),
-                ('current_player', models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, related_name='current_player', to='game.Player')),
+                ('current_player', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='current_player', to='game.Player')),
                 ('player_a', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='player_a', to='game.Player')),
-                ('player_b', models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, related_name='player_b', to='game.Player')),
-                ('winner', models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, related_name='winner', to='game.Player')),
+                ('player_b', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='player_b', to='game.Player')),
+                ('winner', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='winner', to='game.Player')),
             ],
         ),
     ]
