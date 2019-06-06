@@ -6,16 +6,9 @@ from .models import Player
 from .constants import *
 
 def index(request):
-    player = request.session.get('player_id', False)
-    if(player):
-        try:
-            player = Player.objects.get(pk=player)
-        except Player.DoesNotExist:
-            player = false
     context = {
-        'player': player
+        'player': request.player
     }
-
     return render(request, 'game/index.html', context=context)
 
 
@@ -47,13 +40,7 @@ def new(request):
     return HttpResponseRedirect(reverse('game:field'))
 
 def field(request):
-    player = request.session.get('player_id', False)
-    if(player):
-        try:
-            player = Player.objects.get(pk=player)
-        except Player.DoesNotExist:
-            player = false
     context = {
-        'player': player
+        'player': request.player
     }
     return render(request, 'game/field.html', context=context)

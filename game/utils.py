@@ -1,3 +1,7 @@
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
+from .models import Player
 from .constants import *
 
 def get_winner(move_a, move_b):
@@ -18,3 +22,29 @@ def get_winner(move_a, move_b):
         return 0
     else:
         return 1
+
+
+class SimplePlayerMiddleware:
+    protected_views = ['new', 'field']
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        return response
+
+    def process_view(self, request, view_func, view_args, view_kwargs):
+        player = request.session.get('player_id', False)
+        if(player):
+            try:
+                player = Player.objects.get(pk=player)
+            except Player.DoesNotExist:
+                player = False
+        
+        request.player = player
+
+        if(not player and view_func.__name__ in self.protected_views):
+            return HttpResponseRedirect(reverse('game:index'))
+
+        return None
