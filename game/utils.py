@@ -11,7 +11,7 @@ from .constants import *
 # returns -1 if winner is a, 1 if winner is b and 0 if is a tie
 def get_winner(move_a, move_b):
     if(move_a not in MOVES or move_b not in MOVES):
-        raise Exception('invalid move')
+        return False
 
     if move_a == SCISSORS and (move_b == PAPER or move_b == LIZARD):
         return -1

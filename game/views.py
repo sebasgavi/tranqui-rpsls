@@ -4,9 +4,9 @@ from django.http import HttpResponseRedirect, Http404
 from django.db.models import Q
 from pprint import pprint
 
-
 from .models import Player, Game
 from .constants import MOVES
+from .utils import get_winner
 
 # player dashboard view
 def index(request):
@@ -67,7 +67,6 @@ def join(request):
         raise Http404()
     # set player_b
     request.player.other_games.add(game)
-    request.player.current_games.add(game)
     return HttpResponseRedirect(reverse('game:detail', kwargs={ 'game_id': game.id }))
 
 
@@ -99,6 +98,13 @@ def move_select(request, game_id):
         game.move_b = selected_move
     # move already selected
     else: raise Http404()
+
+    # maybe get game result
+    result = get_winner(game.move_a, game.move_b)
+    # if game ended
+    if(result is not False):
+        if(result is not 0): 
+            game.winner_id = game.player_a.id if -1 else game.player_b.id
 
     # save game
     game.save()
