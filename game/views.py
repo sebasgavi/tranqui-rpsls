@@ -71,7 +71,8 @@ def join(request):
     return HttpResponseRedirect(reverse('game:detail', kwargs={ 'game_id': game.id }))
 
 
-def is_my_turn(request, game_id):
+# player reload action when 
+def should_reload(request, game_id):
     game = request.game
     my_turn = "true" if not game.move_a and not game.move_b else "false"
     return HttpResponse(my_turn)

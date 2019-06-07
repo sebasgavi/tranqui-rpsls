@@ -1,5 +1,6 @@
 {% extends 'game/base.html' %}
 {% load game_extras %}
+{% load static %}
 
 {% block content %}
 
@@ -10,7 +11,7 @@
     {% endif %}
 
     {% if already_played %}
-    <p>You already made your move... Waiting for <strong>{{ other_player }}</strong> to play</p>
+        <p>You already made your move... Waiting for <strong>{{ other_player }}</strong> to play</p>
     {% endif %}
 
     {% if not game.winner and not already_played %}
@@ -59,6 +60,11 @@
                 {% endfor %}
             </tbody>
         </table>
+    {% endif %}
+
+    {% if already_played %}
+        <script>var _fetch_url = '{% url 'game:should_reload' game.id %}';</script>
+        <script src="{% static "scripts/fetch_should_reload.js" %}"></script>
     {% endif %}
 
 {% endblock %}
