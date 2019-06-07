@@ -6,7 +6,7 @@ from pprint import pprint
 
 from .models import Player, Game
 from .constants import MOVES
-from .utils import get_winner
+from .utils import get_game_results
 
 # player dashboard view
 def index(request):
@@ -100,7 +100,7 @@ def move_select(request, game_id):
     else: raise Http404()
 
     # maybe get game result
-    result = get_winner(game.move_a, game.move_b)
+    result = get_game_results(game.move_a, game.move_b)
     # if game ended
     if(result is not False):
         if(result is not 0): 

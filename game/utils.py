@@ -9,7 +9,7 @@ from .constants import *
 # move_a -> move constant
 # move_b -> move constant
 # returns -1 if winner is a, 1 if winner is b and 0 if is a tie
-def get_winner(move_a, move_b):
+def get_game_results(move_a, move_b):
     if(move_a not in MOVES or move_b not in MOVES):
         return False
 
