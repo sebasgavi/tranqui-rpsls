@@ -7,11 +7,18 @@
     <h1 class="my-3 text-center">{{ game.player_a.name }} vs {{ game.player_b.name }}</h1>
 
     {% if game.winner %}
-        <h2 class="text-center">Game Finished - The winner is <strong>{{ game.winner.name }}</strong></h2>
+        <h2 class="text-center">
+            Game Finished - 
+            {% if game.winner.id is player.id %}
+                <span class="text-warning">You Won!</span>
+            {% else %}
+                <span class="text-danger">You Lost</span>
+            {% endif %}
+        </h2>
     {% endif %}
 
     {% if already_played %}
-        <p>You already made your move... Waiting for <strong>{{ other_player }}</strong> to play</p>
+        <p class="text-center">You already made your move... Waiting for <strong>{{ other_player }}</strong> to play</p>
     {% endif %}
 
     {% if not game.winner and not already_played %}
