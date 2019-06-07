@@ -12,10 +12,14 @@ from .utils import get_game_results
 # player dashboard view
 def index(request):
     player = request.player
+    # related games ordered by winner value exists
+    games = (player.own_games.all() | player.other_games.all()).order_by('winner')
+    # new games of other players to join
+    other_new_games = Game.objects.filter(~Q(player_a=player.id), ~Q(player_b=player.id), winner__isnull=True)
     context = {
         'player': player,
-        'other_new_games': Game.objects.filter(~Q(player_a=player.id), ~Q(player_b=player.id)),
-        'own_games': player.own_games.all()
+        'other_new_games': other_new_games,
+        'own_games': games,
     }
     return render(request, 'game/index.html', context=context)
 

@@ -1,0 +1,39 @@
+<div class="card">
+    <div class="card-body">
+        <h3 class="card-title mb-4">Your games</h3>
+        {% if own_games %}
+            <ul class="list-group list-group-flush">
+                {% for game in own_games %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {% if not game.player_b %}New {% endif %}
+                        Game
+                        {% if game.player_b %}
+                            vs 
+                            {% if game.player_b.id is player.id %}
+                                {{ game.player_a.name }}
+                            {% else %}
+                                {{ game.player_b.name }}
+                            {% endif %}
+                            
+                            {% if game.winner %}
+                                <a href="{% url 'game:detail' game.id %}" class="btn btn-sm btn-outline-success {% if game.winner.id is player.id %}btn-outline-warning{% else %}btn-outline-danger{% endif %}">
+                                    {% if game.winner.id is player.id %}
+                                        Won
+                                    {% else %}
+                                        Lost
+                                    {% endif %}
+                                </a>
+                            {% else %}
+                                <a href="{% url 'game:detail' game.id %}" class="btn btn-sm btn-outline-success">Enter</a>
+                            {% endif %}
+                        {% else %}
+                            <span class="btn btn-sm btn-outline-success disabled">Waiting...</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You have no current games, create or join a new one.</p>
+        {% endif %}
+    </div>
+</div>
