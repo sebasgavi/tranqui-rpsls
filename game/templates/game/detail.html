@@ -44,7 +44,7 @@
             <tbody>
                 {% for round in steps reversed %}
                     <tr>
-                        <td>{{ forloop.counter }}</td>
+                        <td>{{ forloop.revcounter }}</td>
                         <td>
                             <span class="btn btn{% if round.2 is not -1 %}-outline{% endif %}-{{ round.0|movetovariationclass}} disabled p-2">
                                 {{ round.0 }} <i class="fas fa-hand-{{ round.0|lower }} h4"></i>
