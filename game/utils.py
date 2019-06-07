@@ -1,7 +1,9 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
+from django.shortcuts import get_object_or_404
+from pprint import pprint
 
-from .models import Player
+from .models import Player, Game
 from .constants import *
 
 # move_a -> move constant
@@ -27,9 +29,11 @@ def get_winner(move_a, move_b):
         return 1
 
 
+# Custom Session "Auth" Middleware
 class SimplePlayerMiddleware:
     # views that need a logged in player
     protected_views = ['index', 'new', 'leave', 'detail', 'join', 'move_select']
+    game_views = ['detail', 'move_select']
 
     def __init__(self, get_response):
         self.get_response = get_response
@@ -56,5 +60,30 @@ class SimplePlayerMiddleware:
         if(not player and view_func.__name__ in self.protected_views):
             return HttpResponseRedirect(reverse('game:login'))
 
+        self.process_game_views(request, view_func, view_args, view_kwargs)
+
         # else continue
         return None
+
+    def process_game_views(self, request, view_func, view_args, view_kwargs):
+        # ignore if not a game view
+        if(view_func.__name__ not in self.game_views): return
+        # get game_id
+        game_id = view_kwargs.get('game_id', False)
+        # throw if not game_id  
+        if(not game_id): raise Http404()
+        # get game
+        game = get_object_or_404(Game, pk=game_id)
+        # identify player
+        which_player = 0
+        # player is a
+        if(request.player.id == game.player_a.id): which_player = -1
+        # player is b
+        if(request.player.id == game.player_b.id): which_player = 1
+        # player not related, raise 404
+        if(which_player == 0): raise Http404() 
+        
+        # pass game and current player info view
+        request.game = game
+        request.is_player_a = which_player == -1
+        request.is_player_b = which_player == 1
