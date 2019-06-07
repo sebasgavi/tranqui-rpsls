@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.db.models import Q
 import json
 from pprint import pprint
@@ -70,6 +70,11 @@ def join(request):
     request.player.other_games.add(game)
     return HttpResponseRedirect(reverse('game:detail', kwargs={ 'game_id': game.id }))
 
+
+def is_my_turn(request, game_id):
+    game = request.game
+    my_turn = "true" if not game.move_a and not game.move_b else "false"
+    return HttpResponse(my_turn)
 
 # game detail view
 def detail(request, game_id):

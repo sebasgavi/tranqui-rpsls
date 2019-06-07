@@ -33,7 +33,7 @@ def get_game_results(move_a, move_b):
 class SimplePlayerMiddleware:
     # views that need a logged in player
     protected_views = ['index', 'new', 'leave', 'detail', 'join', 'move_select']
-    game_views = ['detail', 'move_select']
+    game_views = ['detail', 'move_select', 'is_my_turn']
 
     def __init__(self, get_response):
         self.get_response = get_response
