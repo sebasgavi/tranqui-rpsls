@@ -20,9 +20,11 @@
         {% if player %}
 
             <nav class="navbar navbar-light bg-light">
-                <span class="navbar-brand mb-0 h1">{{ player.name }}</span>
-                
-                <a href="{% url 'game:leave' %}" class="btn btn-outline-secondary">Leave</a>
+                <a href="{% url 'game:index' %}">Game list</a>
+                <div>
+                    <span class="navbar-brand mb-0 h1">{{ player.name }}</span>
+                    <a href="{% url 'game:leave' %}" class="btn btn-outline-secondary">Leave</a>
+                </div>
             </nav>
     
         {% endif %}

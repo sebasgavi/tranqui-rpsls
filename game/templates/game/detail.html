@@ -9,6 +9,10 @@
         <h2 class="text-center">Game Finished - The winner is <strong>{{ game.winner.name }}</strong></h2>
     {% endif %}
 
+    {% if already_played %}
+    <p>You already made your move... Waiting for <strong>{{ other_player }}</strong> to play</p>
+    {% endif %}
+
     {% if not game.winner and not already_played %}
         <h2>Select your next move</h2>
         <div class="row">
@@ -17,7 +21,7 @@
                     <form action="{% url 'game:move_select' game.id %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="move" value="{{ move }}">
-                        <button type="submit" class="btn btn-outline-{{ move|movetovariationclass}} btn-lg btn-block py-5 d-flex flex-column align-items-center">
+                        <button type="submit" class="btn btn-outline-{{ move|movetovariationclass}} btn-lg btn-block py-3 d-flex flex-column align-items-center">
                             <i class="fas fa-hand-{{ move|lower }} h1"></i>
                             {{ move|title }}
                         </button>
@@ -38,7 +42,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for round in steps %}
+                {% for round in steps reversed %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>

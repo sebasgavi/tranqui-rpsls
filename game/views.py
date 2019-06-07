@@ -73,15 +73,17 @@ def join(request):
 
 # game detail view
 def detail(request, game_id):
-    if(request.player.id != request.game.player_a.id
-        and request.player.id != request.game.player_b.id):
+    game = request.game
+    if(request.player.id != game.player_a.id
+        and request.player.id != game.player_b.id):
         raise Http404()
     context = {
         'player': request.player,
-        'game': request.game,
+        'game': game,
         'moves': MOVES,
-        'steps': json.loads(request.game.steps),
-        'already_played': (request.is_player_a and request.game.move_a) or (request.is_player_b and request.game.move_b)
+        'steps': json.loads(game.steps),
+        'already_played': (request.is_player_a and game.move_a) or (request.is_player_b and game.move_b),
+        'other_player': game.player_b if request.is_player_a else game.player_a
     }
     return render(request, 'game/detail.html', context=context)
 
