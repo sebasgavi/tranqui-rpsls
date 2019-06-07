@@ -8,10 +8,14 @@
     <div class="row">
         {% for move in moves %}
             <div class="col">
-                <button class="btn btn-outline-{{ move|movetovariationclass}} btn-lg btn-block py-5 d-flex flex-column align-items-center">
-                    <i class="fas fa-hand-{{ move|lower }} h1"></i>
-                    {{ move|title }}
-                </button>
+                <form action="{% url 'game:move_select' game.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="move" value="{{ move }}">
+                    <button type="submit" class="btn btn-outline-{{ move|movetovariationclass}} btn-lg btn-block py-5 d-flex flex-column align-items-center">
+                        <i class="fas fa-hand-{{ move|lower }} h1"></i>
+                        {{ move|title }}
+                    </button>
+                </form>
             </div>
         {% endfor %}
     </div>

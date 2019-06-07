@@ -29,7 +29,7 @@ def get_winner(move_a, move_b):
 
 class SimplePlayerMiddleware:
     # views that need a logged in player
-    protected_views = ['index', 'new', 'field']
+    protected_views = ['index', 'new', 'leave', 'detail', 'join', 'move_select']
 
     def __init__(self, get_response):
         self.get_response = get_response

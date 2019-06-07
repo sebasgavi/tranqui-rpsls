@@ -10,5 +10,6 @@ urlpatterns = [
     path('leave', views.leave, name='leave'),
     path('new', views.new, name='new'),
     path('join', views.join, name='join'),
-    path('<int:game_id>', views.detail, name='detail')
+    path('<int:game_id>', views.detail, name='detail'),
+    path('<int:game_id>/move', views.move_select, name='move_select')
 ]

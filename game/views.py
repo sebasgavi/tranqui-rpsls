@@ -75,6 +75,7 @@ def join(request):
 def detail(request, game_id):
     player = request.player
     game = get_object_or_404(Game, pk=game_id)
+    # player can't see game if it isn't related
     if(player.id != game.player_a.id and player.id != game.player_b.id):
         raise Http404()
     context = {
@@ -83,3 +84,32 @@ def detail(request, game_id):
         'moves': MOVES
     }
     return render(request, 'game/detail.html', context=context)
+
+
+# game move select action
+def move_select(request, game_id):
+    player = request.player
+    game = get_object_or_404(Game, pk=game_id)
+    # get move
+    selected_move = request.POST.get('move', False)
+    # verify valid move
+    if(selected_move not in MOVES):
+        raise Http404()
+    # identify player
+    which_player = 0
+    if(player.id == game.player_a.id): which_player = -1
+    if(player.id == game.player_b.id): which_player = 1
+    if(which_player == 0): raise Http404() # player not related
+    # set move_a for player_a
+    if(which_player == -1 and not game.move_a):
+        game.move_a = selected_move
+    # set move_b for player_b
+    elif(which_player == 1 and not game.move_b):
+        game.move_b = selected_move
+    # move already selected
+    else:
+        raise Http404()
+    # save move
+    game.save()
+    # redirect to detail
+    return HttpResponseRedirect(reverse('game:detail', kwargs={ 'game_id': game.id }))
