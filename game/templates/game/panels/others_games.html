@@ -17,5 +17,11 @@
         {% else %}
             <p>No games to join now, wait for another player to create one.</p>
         {% endif %}
+
+        {% if error_game_full %}
+            <div class="alert alert-danger" role="alert">
+                Game already full, please select another.
+            </div> 
+        {% endif %}
     </div>
 </div>

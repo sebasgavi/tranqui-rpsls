@@ -15,11 +15,13 @@ def index(request):
     # related games ordered by winner value exists
     games = (player.own_games.all() | player.other_games.all()).order_by('winner')
     # new games of other players to join
-    other_new_games = Game.objects.filter(~Q(player_a=player.id), ~Q(player_b=player.id), winner__isnull=True)
+    other_new_games = Game.objects.filter(~Q(player_a=player.id), player_b__isnull=True)
+    error = request.GET.get('error', False)
     context = {
         'player': player,
         'other_new_games': other_new_games,
         'own_games': games,
+        'error_game_full': True if error == 'game_full' else False
     }
     return render(request, 'game/index.html', context=context)
 
@@ -69,7 +71,7 @@ def join(request):
     game = get_object_or_404(Game, pk=request.POST['game_id'])
     # game full
     if(game.player_b_id):
-        raise Http404()
+        return HttpResponseRedirect(reverse('game:index') + "?error=game_full")    
     # set player_b
     request.player.other_games.add(game)
     return HttpResponseRedirect(reverse('game:detail', kwargs={ 'game_id': game.id }))
