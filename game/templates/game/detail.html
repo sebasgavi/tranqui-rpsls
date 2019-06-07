@@ -3,21 +3,58 @@
 
 {% block content %}
 
-    <h1 class="my-3">Game {{ game.id }}</h1>
+    <h1 class="my-3 text-center">{{ game.player_a.name }} vs {{ game.player_b.name }}</h1>
 
-    <div class="row">
-        {% for move in moves %}
-            <div class="col">
-                <form action="{% url 'game:move_select' game.id %}" method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="move" value="{{ move }}">
-                    <button type="submit" class="btn btn-outline-{{ move|movetovariationclass}} btn-lg btn-block py-5 d-flex flex-column align-items-center">
-                        <i class="fas fa-hand-{{ move|lower }} h1"></i>
-                        {{ move|title }}
-                    </button>
-                </form>
-            </div>
-        {% endfor %}
-    </div>
+    {% if game.winner %}
+        <h2 class="text-center">Game Finished - The winner is <strong>{{ game.winner.name }}</strong></h2>
+    {% endif %}
+
+    {% if not game.winner and not already_played %}
+        <h2>Select your next move</h2>
+        <div class="row">
+            {% for move in moves %}
+                <div class="col">
+                    <form action="{% url 'game:move_select' game.id %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="move" value="{{ move }}">
+                        <button type="submit" class="btn btn-outline-{{ move|movetovariationclass}} btn-lg btn-block py-5 d-flex flex-column align-items-center">
+                            <i class="fas fa-hand-{{ move|lower }} h1"></i>
+                            {{ move|title }}
+                        </button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if steps %}
+        <h2 class="mt-4">Game rounds</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>{{ game.player_a.name}}</th>
+                    <th>{{ game.player_b.name}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for round in steps %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            <span class="btn btn{% if round.2 is not -1 %}-outline{% endif %}-{{ round.0|movetovariationclass}} disabled p-2">
+                                {{ round.0 }} <i class="fas fa-hand-{{ round.0|lower }} h4"></i>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="btn btn{% if round.2 is not 1 %}-outline{% endif %}-{{ round.1|movetovariationclass}} disabled p-2">
+                                {{ round.1 }} <i class="fas fa-hand-{{ round.1|lower }} h4"></i>
+                            </span>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 
 {% endblock %}

@@ -79,7 +79,9 @@ def detail(request, game_id):
     context = {
         'player': request.player,
         'game': request.game,
-        'moves': MOVES
+        'moves': MOVES,
+        'steps': json.loads(request.game.steps),
+        'already_played': (request.is_player_a and request.game.move_a) or (request.is_player_b and request.game.move_b)
     }
     return render(request, 'game/detail.html', context=context)
 
