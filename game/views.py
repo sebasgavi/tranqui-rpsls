@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.db.models import Q
+import json
 from pprint import pprint
 
 from .models import Player, Game
@@ -101,12 +102,23 @@ def move_select(request, game_id):
 
     # maybe get game result
     result = get_game_results(game.move_a, game.move_b)
-    # if game ended
+    # if both played already
     if(result is not False):
-        if(result is not 0): 
+        # if game ended
+        if(result is not 0):
+            # set winner
             game.winner_id = game.player_a.id if -1 else game.player_b.id
+        # parse steps
+        steps = json.loads(game.steps)
+        # append last play
+        steps.append([ game.move_a, game.move_b, result ])
+        # save updated steps
+        game.steps = json.dumps(steps)
+        # clean moves
+        game.move_a = ''
+        game.move_b = ''
 
-    # save game
+    # save game moves, steps and winner
     game.save()
     # redirect to detail
     return HttpResponseRedirect(reverse('game:detail', kwargs={ 'game_id': game.id }))
