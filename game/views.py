@@ -123,7 +123,7 @@ def move_select(request, game_id):
         # if game ended
         if(result is not 0):
             # set winner
-            game.winner_id = game.player_a.id if -1 else game.player_b.id
+            game.winner_id = game.player_a.id if result == -1 else game.player_b.id
         # parse steps
         steps = json.loads(game.steps)
         # append last play
