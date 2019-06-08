@@ -14,13 +14,19 @@ def index(request):
     player = request.player
     # related games ordered by winner value exists
     games = (player.own_games.all() | player.other_games.all()).order_by('winner')
+    # own games waiting for player_b to join, to auto load when joined
+    waiting_games = player.own_games.filter(player_b__isnull=True).values_list('id', flat=True)
+    # comma separated ids of waiting games
+    waiting_ids = ','.join(str(id) for id in waiting_games)
     # new games of other players to join
     other_new_games = Game.objects.filter(~Q(player_a=player.id), player_b__isnull=True)
+    # error code
     error = request.GET.get('error', False)
     context = {
         'player': player,
         'other_new_games': other_new_games,
         'own_games': games,
+        'waiting_ids': waiting_ids,
         'error_game_full': True if error == 'game_full' else False
     }
     return render(request, 'game/index.html', context=context)
@@ -82,6 +88,24 @@ def should_reload(request, game_id):
     game = request.game
     my_turn = "true" if not game.move_a and not game.move_b else "false"
     return HttpResponse(my_turn)
+
+
+# player reload action when 
+def should_enter_game(request):
+    # get ids from query string
+    ids = request.GET.get('ids', False)
+    # if no ids raise 404
+    if not ids: raise Http404()
+    # get first game in ids with joined player b
+    game = request.player.own_games.filter(id__in=ids.split(','), player_b__isnull=False).first()
+    pprint(game)
+    # if game exists return detail url
+    if game:
+        return HttpResponse(reverse('game:detail', kwargs={ 'game_id': game.id }))
+    # else return empty string
+    else:
+        return HttpResponse('')
+
 
 # game detail view
 def detail(request, game_id):

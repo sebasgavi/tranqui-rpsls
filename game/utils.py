@@ -32,7 +32,7 @@ def get_game_results(move_a, move_b):
 # Custom Session "Auth" Middleware
 class SimplePlayerMiddleware:
     # views that need a logged in player
-    protected_views = ['index', 'new', 'leave', 'detail', 'join', 'move_select']
+    protected_views = ['index', 'new', 'leave', 'detail', 'join', 'move_select', 'should_reload', 'should_enter_game']
     game_views = ['detail', 'move_select', 'should_reload']
 
     def __init__(self, get_response):
